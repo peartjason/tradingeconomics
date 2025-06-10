@@ -1,11 +1,10 @@
 ﻿services:
   - type: web
-    name: tradingeconomics
+    name: tradingeconomics-app
     env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: flask run --host=0.0.0.0 --port=10000
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "flask run --host=0.0.0.0 --port=10000"
     envVars:
-      - key: FLASK_APP
-        value: app.py
-      - key: FLASK_ENV
-        value: production
+      - key: TRADINGECONOMICS_API_KEY
+        value: 6c828f4bbe58471:uq5ohmz0tarx7ii
