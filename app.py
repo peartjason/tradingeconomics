@@ -1,26 +1,21 @@
+﻿from flask import Flask, render_template
 import requests
-from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    chart_data = {}
-    if request.method == 'POST':
-        country1 = request.form['country1']
-        country2 = request.form['country2']
-        indicator = request.form['indicator']
-        api_key = '6c828f4bbe58471:uq5ohmz0tarx7ii'  # Replace this with your real API key
+    try:
+        api_key = "6c828f4bbe58471:uq5ohmz0tarx7ii"
+        url = f"https://api.tradingeconomics.com/country/united states?c={api_key}&f=json"
+        response = requests.get(url)
+        response.raise_for_status()
+        json_data = response.json()
 
-        url1 = f"https://api.tradingeconomics.com/historical/country/{country1}/indicator/{indicator}?c={api_key}"
-        url2 = f"https://api.tradingeconomics.com/historical/country/{country2}/indicator/{indicator}?c={api_key}"
+        country_name = json_data[0]['Country']
+        chart_data = {"country1": [{"Country": item["Country"], "Value": item.get("Value", "N/A")} for item in json_data]}
+    except Exception as e:
+        country_name = "Error"
+        chart_data = {"country1": [{"Country": "Error", "Value": str(e)}]}
 
-        res1 = requests.get(url1).json()
-        res2 = requests.get(url2).json()
-
-        chart_data = {'country1': res1, 'country2': res2}
-
-    return render_template('index.html', data=chart_data)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    return render_template("index.html", country_name=country_name, data=chart_data)

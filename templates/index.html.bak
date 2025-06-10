@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Country Indicator Comparison</title>
+</head>
+<body>
+    <h1>Compare Economic Indicators</h1>
+    <form method="post">
+        <input name="country1" placeholder="Country 1 (e.g. nigeria)" required>
+        <input name="country2" placeholder="Country 2 (e.g. ghana)" required>
+        <input name="indicator" placeholder="Indicator (e.g. gdp)" required>
+        <button type="submit">Compare</button>
+    </form>
+
+    {% if data %}
+        <h2>Results</h2>
+        <h3>{{ data.country1[0].Country }}</h3>
+        <pre>{{ data.country1 | tojson(indent=2) }}</pre>
+        <h3>{{ data.country2[0].Country }}</h3>
+        <pre>{{ data.country2 | tojson(indent=2) }}</pre>
+    {% endif %}
+</body>
+</html>
